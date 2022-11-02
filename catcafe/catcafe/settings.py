@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'catcafe.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'catcafe',
-        'USER': 'postgres',
-        'PASSWORD': 'prsource1619',
+        'NAME': config("DB_NAME"),
+        'USER': config("DB_USERNAME"),
+        'PASSWORD': config("DB_PASSWORD"),
         'HOST': '127.0.0.1',
         'PORT': '5432'
     }
