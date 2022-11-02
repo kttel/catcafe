@@ -1,0 +1,12 @@
+ <div class="head-text left-padding">
+    <span class="head-span"><a href="{% url 'cafe:index' %}">Cat Cafe</a></span>
+</div>
+<div class="desc-text left-padding">
+    <span>Our cafe is a stream of inspiration flowing into a variety of dishes. You can order a lot ov various delicious
+    food to enjoy the moment. We also plan to open several cafes in Ukraine in the near future!</span>
+    {% if not user.is_authenticated %}
+    <div class="buttons">
+        <a class="button" href="{% url 'cafe:login' %}">Login</a>
+    </div>
+    {% endif %}
+</div>

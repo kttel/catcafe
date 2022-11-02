@@ -1,0 +1,16 @@
+{% load tags %}
+
+<div class="icons">
+    <a href="{% url 'cafe:index' %}"><i class="fa-solid fa-list-ul" title="Main page"></i></a>
+    {% if user.is_authenticated %}
+        {% if user|has_group:"worker" %}
+        <a href="{% url 'cafe:management' %}"><i class="fa-solid fa-bars-progress" title="Management panel"></i></a>
+        {% endif %}
+        <a href="{% url 'cafe:orders' %}"><i class="fa-solid fa-basket-shopping" title="My order"></i></a>
+        <a href="{% url 'cafe:wishlist' %}"><i class="fa fa-regular fa-heart" title="Liked dishes"></i></a>
+        <a href="{% url 'cafe:profile' %}"><i class="fa fa-regular fa-user" title="Profile"></i></a>
+        <a href="{% url 'cafe:logout' %}"><i class="fa-solid fa-right-from-bracket" title="Logout"></i></a>
+    {% else %}
+        <a href="{% url 'cafe:login' %}"><i class="fa-solid fa-arrow-right-to-bracket" title="Login"></i></a>
+    {% endif %}
+</div>

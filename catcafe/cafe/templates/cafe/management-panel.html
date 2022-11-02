@@ -1,0 +1,63 @@
+{% extends 'cafe/main_wrapper.html' %}
+{% load static %}
+
+{% block side_information %}
+<div class="inner-left-container">
+    <div class="head-text left-padding">
+        Management panel
+    </div>
+    <div class="order-info left-padding">
+        {% for key, value in orders.items %}
+        <div>{{ key }}: {{ value.count }}</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+{% block content %}
+<div class="right-inner">
+    <div class="head-text">
+        All orders
+    </div>
+    <div class="orders-panel left-padding">
+        {% for key, value in orders.items %}
+            {% if value.count != 0 %}
+                <div class="head-text">{{ key }}</div>
+                <div>
+                    <div class="orders-list">
+                        {% for order in value %}
+                           <div class="order">
+                               <div>
+                                   {{ order }} ({{ order.user }})
+                                   <div>Address: {{ order.ship_address }}</div>
+                                   <div>{% if order.promocode != null %}Promocode: {{ order.promocode }} {% endif %}</div>
+                               </div>
+                               <div>
+                                   {% for detail in order.details.all %}
+                                   <div>{{ detail.dish.name }} ({{ detail.quantity }})</div>
+                                   {% endfor %}
+                               </div>
+                               <div class="order-buttons">
+                                   <div>
+                                       <form action="{% url 'cafe:apply_by_worker' order.pk %}" method="post">
+                                           {% csrf_token %}
+                                           <button class="button" type="submit">Apply</button>
+                                       </form>
+                                   </div>
+                                   <div>
+                                       <form action="{% url 'cafe:cancel_by_worker' order.pk %}" method="post">
+                                           {% csrf_token %}
+                                           <button class="button" type="submit">Cancel</button>
+                                       </form>
+                                   </div>
+                               </div>
+                           </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

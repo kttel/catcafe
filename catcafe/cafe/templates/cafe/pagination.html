@@ -1,0 +1,15 @@
+{% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"><div class="page"><i class="fa-solid fa-arrow-left"></i></div></a>
+            <a href="?page={{ page_obj.previous_page_number }}"><div class="page">{{ page_obj.previous_page_number }}</div></a>
+        {% endif %}
+        <div class="current-page">
+            {{ page_obj.number }}
+        </div>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"><div class="page">{{ page_obj.next_page_number }}</div></a>
+            <a href="?page={{ page_obj.next_page_number }}"><div class="page"><i class="fa-solid fa-arrow-right"></i></div></a>
+        {% endif %}
+    </div>
+{% endif %}

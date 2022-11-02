@@ -1,0 +1,87 @@
+{% extends 'cafe/main_wrapper.html' %}
+{% load static %}
+
+{% block side_information %}
+<div class="inner-left-container">
+   <div class="head-text left-padding">
+       About order
+   </div>
+    <div class="order-information left-padding">
+        <div class="amount">
+            Dish species: {{ amount }}
+        </div>
+        <div class="price">
+            Total price:
+            {% if amount > 0 %}
+                {{ total_price }}₴
+            {% else %}
+                —
+            {% endif %}
+        </div>
+        {% if amount > 0 %}
+        <div class="ordering-block">
+            <form action="{% url 'cafe:order_all' %}" method="post">
+                {% csrf_token %}
+                <div class="simple-text"><input type="text" class="simple-input" name="address"
+                                                value="{{ address }}" placeholder="Address" required></div>
+                <div class="simple-text"><button class="button" type="submit">
+                    Order all
+                </button></div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    <div class="ordered left-padding">
+        <div class="head-text">Last order</div>
+        {% if last_order %}
+        <div class="last-order-details">
+            {% for dish in last_order.details.all %}
+            <div>{{ dish.dish.name }} - x{{ dish.quantity }}</div>
+            {% endfor %}
+        </div>
+        <div class="ordering-block">
+            <form action="{% url 'cafe:cancel_order' last_order.id %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="order_id" value="{{ last_order.id }}">
+                <button class="button" type="submit">
+                    Cancel order
+                </button>
+            </form>
+        </div>
+        {% else %}
+        <div class="simple-text">You haven't any orders you can cancel.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="right-inner">
+    <div class="head-text">
+        Current order
+    </div>
+   <div class="dishes order-dishes">
+      {% for element in details %}
+       <div class="dish">
+           <div class="dish-left"><img src="{{ element.dish.image.url }}" class="dish-img"></div>
+                <div class="dish-right">
+                    <div class="dish-title">{{ element.dish.name }} (x{{ element.quantity }})</div>
+                    <div class="dish-desc">{{ element.dish.description|truncatewords:35 }}</div>
+                    <div class="dish-btns">
+                        <div class="dish-btn"><form method="POST" action="{% url 'cafe:delete_from_order' element.pk %}">
+                            {% csrf_token %}
+                            <button class="button" type="submit">Delete</button>
+                            </form></div>
+                        <div class="dish-btn">
+                            <a href="{% url 'cafe:dish' element.dish.pk %}">Go</a>
+                        </div>
+                        <div class="dish-btn dish-desc">
+                            <span>{{ element.total_price }}₴</span>
+                        </div>
+                    </div>
+                </div>
+       </div>
+      {% endfor %}
+   </div>
+</div>
+{% endblock %}

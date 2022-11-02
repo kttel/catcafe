@@ -1,0 +1,29 @@
+{% extends 'cafe/block_wrapper.html' %}
+
+{% block content %}
+<div class="container register">
+    <div class="only-side">
+        <div class="header">
+            <span>
+                Register
+            </span>
+        </div>
+        <div class="main-text">
+            <span>To make full use of our cafe website you need to create account if you didn't do it before.
+                You need to fill in a few fields with relevant data that is important to remember.</span>
+        </div>
+        <div class="register-interaction">
+            <form method="post">
+                {% csrf_token %}
+                {% for f in form %}
+                <div class="form-element">
+                    <label class="signed-labels" for="{{ f.id_for_label }}">{{ f.label }}</label>
+                    <div>{{f}}</div>
+                </div>
+                {% endfor %}
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

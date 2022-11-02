@@ -1,0 +1,42 @@
+{% extends 'cafe/main_wrapper.html' %}
+{% load static %}
+
+{% block side_information %}
+<div class="inner-left-container">
+   {% include 'cafe/top-left-block.html' %}
+    <div class="categories left-padding">
+        <div class="head-text">
+            <span>Categories</span>
+        </div>
+    </div>
+    <div class="cat-list left-padding">
+        {% include 'cafe/categories.html' %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="right-inner">
+    <div class="inner-picture">
+        <img src="{% static 'cafe/img/cat_picture.png' %}" class="cat-picture" alt="cat picture">
+    </div>
+    <div class="head-text left-padding">
+            <span>All categories</span>
+    </div>
+    <div class="dishes">
+        {% for dish in dishes %}
+            <div class="dish">
+                <div class="dish-left"><img src="{{ dish.image.url }}" class="dish-img"></div>
+                <div class="dish-right">
+                    <div class="dish-title">{{ dish.name }}</div>
+                    <div class="dish-desc">{{ dish.description|truncatewords:35 }}</div>
+                    <div class="dish-btn"><a href="{% url 'cafe:dish' dish.pk %}">Go</a></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="pagination-bottom">
+        {% include 'cafe/pagination.html' %}
+    </div>
+</div>
+{% endblock %}

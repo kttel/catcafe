@@ -1,0 +1,78 @@
+{% extends 'cafe/main_wrapper.html' %}
+{% load static %}
+
+{% block side_information %}
+<div class="inner-left-container">
+   <div class="dish_info left-padding">
+       <div class="head-text">
+            <span>{{ user.last_name }} {{ user.first_name }}</span>
+        </div>
+       <div class="dish-image">
+           <img src="{{ user.profile.image.url }}" class="dish-page-image" alt="dish image">
+       </div>
+   </div>
+    <div class="information left-padding">
+        <div class="head-text">
+            <span>{{ user.username }}</span>
+        </div>
+    </div>
+    <div class="description left-padding">
+        {{ dish.description }}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="right-inner">
+    <div class="head-text">
+        Your orders
+    </div>
+    <div class="left-padding orders">
+        <div class="total-orders order-list">
+            <div class="list-name"><span>Total</span></div>
+            <div class="amount">{{ total }}</div>
+        </div>
+        <div class="completed-orders order-list">
+            <div class="list-name"><span>Completed</span></div>
+            <div class="amount">{{ completed }}</div>
+        </div>
+        <div class="processing-orders order-list">
+            <div class="list-name"><span>Processing</span></div>
+            <div class="amount">{{ processing }}</div>
+        </div>
+    </div>
+    <div class="editing left-padding">
+        <form method="post" class="user-fields" enctype="multipart/form-data">
+            {% for field in user_form %}
+            {% csrf_token %}
+            <label for="{{ field.id_for_label }}" class="comment-label">{{ field.label }}</label>
+            <input type="hidden" name="user" value="{{ user }}">
+            <input type="hidden" name="form_type" value="user_form">
+            <div class="user-field">{{ field }}</div>
+            {% endfor %}
+            <button type="submit" class="button user-information-button">Save</button>
+        </form>
+    </div>
+    {% if completed > 0 %}
+    <div class="head-text left-padding">
+        Orders feedback
+    </div>
+    <div class="create-comment left-padding">
+        <form method="post" class="user-fields">
+            <div class="first-row">
+            {% for field in comment_form %}
+                {% if field.label == 'Content' %}
+                    </div>
+                {% endif %}
+            {% csrf_token %}
+            <div><label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            <div class="user-field">{{ field }}</div></div>
+            {% endfor %}
+            <input type="hidden" name="form_type" value="comment_form">
+            <input type="hidden" name="user" value="{{ user }}">
+            <button type="submit" class="button user-information-button">Comment</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

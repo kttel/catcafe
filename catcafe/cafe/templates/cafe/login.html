@@ -1,0 +1,44 @@
+{% extends 'cafe/block_wrapper.html' %}
+
+{% block content %}
+<div class="centered">
+    <div class="container">
+        <div class="left">
+            <div class="left-inner">
+                <span class="header">
+                    Welcome to the Cat Cafe!
+                </span>
+                <span>
+                    Welcome to the our "Cat Cafe", opened in November 2022! After registration you get an opportunity to order a lot of yummy food prepared in a novel way!
+                </span>
+                <div class="buttons">
+                    <a class="button" href="{% url 'cafe:register' %}">Register</a>
+                    <a class="button" href="{% url 'cafe:index' %}">Back to the main</a>
+                </div>
+            </div>
+        </div>
+        <div class="center">
+        </div>
+        <div class="right">
+            <div class="right-inner">
+                <span class="header">
+                    Log In Now
+                </span>
+                <div class="login-interaction">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% for f in form %}
+                        <div class="form-element">
+                            <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+                            {{ f }}
+                        </div>
+                        {% endfor %}
+                        <button type="submit">Login</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

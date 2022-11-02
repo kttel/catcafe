@@ -1,0 +1,5 @@
+{% for cat in categories %}
+{% if cat.count > 0 %}
+<div class="category"><a href="{% url 'cafe:category' cat.slug %}">{{ cat.title }}</a> ({{ cat.count }})</div>
+{% endif %}
+{% endfor %}

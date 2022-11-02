@@ -1,0 +1,51 @@
+{% extends 'cafe/main_wrapper.html' %}
+{% load static %}
+
+{% block side_information %}
+<div class="inner-left-container">
+   {% include 'cafe/top-left-block.html' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="right-inner">
+    <div class="right-wishlist">
+        <div class="searching-field">
+                <form method="get" class="searching">
+                    <input type="text" name="search-dish" class="simple-input search-wishlist-input" placeholder="Enter your request">
+                <button class="button seaching-btn" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    <div class="wishlist">
+        <div class="head-text left-padding">
+            <span>Wishlist</span>
+        </div>
+        <div class="dishes wish-list">
+        {% for w in wishlist %}
+            <div class="dish">
+                <div class="dish-left"><img src="{{ w.dish.image.url }}" class="dish-img"></div>
+                <div class="dish-right">
+                    <div class="dish-title">{{ w.dish.name }}</div>
+                    <div class="dish-desc">{{ w.dish.description|truncatewords:35 }}</div>
+                    <div class="dish-btns">
+                        <div class="dish-btn"><form method="POST" action="{% url 'cafe:delete_from_wishlist' w.dish.pk %}">
+                            {% csrf_token %}
+                            <button class="button" type="submit">Delete</button>
+                            </form></div>
+                        <div class="dish-btn">
+                            <a href="{% url 'cafe:dish' w.dish.pk %}">Go</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+    {% if page_obj.has_other_pages %}
+     <div class="pagination-bottom">
+            {% include 'cafe/pagination.html' %}
+     </div>
+    {% endif %}
+</div>
+{% endblock %}

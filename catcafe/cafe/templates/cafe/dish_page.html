@@ -1,0 +1,83 @@
+{% extends 'cafe/main_wrapper.html' %}
+{% load static %}
+
+{% block side_information %}
+<div class="inner-left-container">
+   <div class="dish_info left-padding">
+       <div class="head-text">
+            <span>{{ dish.name }}</span>
+        </div>
+       <div class="dish-image">
+           <img src="{{ dish.image.url }}" class="dish-page-image" alt="dish image">
+       </div>
+   </div>
+    <div class="information left-padding">
+        <div class="head-text">
+            <span>{{ dish.price }}₴</span>
+        </div>
+    </div>
+    <div class="description left-padding">
+        {{ dish.description }}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="right-inner">
+    <div class="head-text">
+        Dish Section
+    </div>
+        <div class="buttons-row left-padding">
+            <form method="post" action="{% url 'cafe:order' dish.pk %}">
+                {% csrf_token %}
+                <div>
+                    <input type="hidden" name="dish" value="{{ dish.pk }}">
+                    <input type="number" name="quantity" value="1" min="1" max="10" class="simple-input" required>
+                    <button class="button" type="submit" title="Order">Buy</button>
+                </div>
+            </form>
+            <div>
+                <form method="post" name="adding_to_wishlist" action="{% url 'cafe:add_to_wishlist' dish.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="dish" value="{{ dish.pk }}">
+                    <input type="hidden" name="user" value="{{ user.pk }}">
+                    <button class="button add_to_wishlist" type="submit" title="Add to wishlist">Save</button>
+                </form>
+            </div>
+        </div>
+
+    <div class="comments">
+        {% for c in dish.comment_set.all %}
+        <div class="comment-data">
+            <div class="comment">
+                <div class="comment-left">
+
+                    <div class="comment-author">{{ c.user }}</div>
+                    <img src="{{ c.user.profile.image.url }}" class="comment-img">
+                </div>
+                <div class="comment-right">
+                    <div class="comment-title">{{ c.title }}</div>
+                    <div class="comment-content">{{ c.content|linebreaks }}</div>
+                </div>
+            </div>
+            <div class="comm-info">
+                {% if c.user == user %}
+                    <div class="delete-btn">
+                        <form action="{% url 'cafe:delete_comment' dish.pk c.pk %}" method="post">
+                            {% csrf_token %}
+                            <button class="button" type="submit">delete</button>
+                        </form>
+                    </div>
+                {% endif %}
+                <div class="date">
+                    {{ c.data_created|date:"d.m.Y H:i" }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="pagination-bottom">
+        {% include 'cafe/pagination.html' %}
+    </div>
+</div>
+{% endblock %}
